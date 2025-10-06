@@ -1,0 +1,211 @@
+<!doctype html>
+<html lang="en">
+  <head>
+  <meta charset="utf-8">
+  <title>NLP Analysis Report — {{ domain_name or 'All domains' }}</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <style>
+      :root { --accent: #2b7cff; --muted: #666; --bg: #f7f9fc; }
+      body { font-family: Inter, system-ui, -apple-system, Roboto, 'Helvetica Neue', Arial; margin: 0; background: var(--bg); color: #222; }
+      .container { max-width: 1100px; margin: 28px auto; padding: 24px; background: #fff; box-shadow: 0 6px 20px rgba(0,0,0,0.06); border-radius: 8px; }
+      header { display:flex; justify-content:space-between; align-items:center; gap:16px; margin-bottom: 18px; }
+      header h1 { margin:0; font-size:20px; }
+      .meta { text-align:right; color:var(--muted); font-size:13px; }
+      .grid { display:grid; grid-template-columns: 1fr 360px; gap:18px; }
+      .card { background: #fff; padding: 14px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.04); }
+      .kpi { display:flex; gap:12px; align-items:center; }
+      .kpi .num { font-weight:700; font-size:18px; }
+      .section { margin-top:14px; }
+      .img { width:100%; height:auto; border-radius:6px; border:1px solid #eee; display:block; }
+      table { width:100%; border-collapse:collapse; margin-top:8px; }
+      th, td { text-align:left; padding:8px; border-bottom:1px solid #f1f1f1; font-size:13px; }
+      h2 { margin:8px 0 12px 0; font-size:16px; }
+      .badge { display:inline-block; background:var(--accent); color:#fff; padding:6px 10px; border-radius:999px; font-size:12px; }
+      .insight { margin:8px 0; padding:10px; background:#fbfcff; border-left:4px solid var(--accent); }
+      .what-how-why { display:grid; grid-template-columns: 1fr 1fr 1fr; gap:12px; margin-top:12px; }
+      .small { color:var(--muted); font-size:13px; }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <div>
+          <h1>Analysis Report — <span class="badge">{{ domain_name or 'All domains' }}</span></h1>
+          <div class="small">Generated on {{ generated_on }}</div>
+        </div>
+        <div class="meta">
+          <div>Rows: <strong>{{ rows }}</strong></div>
+          <div class="small">Positive: {{ pct_positive }}% • Negative: {{ pct_negative }}% • Neutral: {{ pct_neutral }}</div>
+        </div>
+      </header>
+
+      <div class="grid">
+        <div>
+          <div class="card" style="margin-bottom:12px;">
+            <div class="tabs" role="tablist" style="display:flex; gap:8px;">
+              <button class="tab-btn active" data-tab="overview">Overview</button>
+              <button class="tab-btn" data-tab="trends">Trends</button>
+              <button class="tab-btn" data-tab="multivariate">Multivariate</button>
+              <button class="tab-btn" data-tab="clusters">Clusters</button>
+            </div>
+          </div>
+
+          <div class="tab-panel active" id="overview">
+            <div class="card">
+              <h2>Executive summary</h2>
+              <div class="insight">
+                <strong>Overall sentiment</strong>: mean VADER compound = <strong>{{ overall_sentiment_mean }}</strong> (std {{ overall_sentiment_std }}).
+              </div>
+              <div class="insight">
+                <strong>Top positive terms</strong>: {{ top_pos_terms|join(', ') }}
+              </div>
+              <div class="insight">
+                <strong>Top negative terms</strong>: {{ top_neg_terms|join(', ') }}
+              </div>
+              <div style="margin-top:10px;">
+                <h2>Notable time points</h2>
+                <p class="small">Most positive period: <strong>{{ most_positive_time }}</strong> (mean={{ most_positive_val }}).<br>
+                Most negative period: <strong>{{ most_negative_time }}</strong> (mean={{ most_negative_val }}).</p>
+              </div>
+            </div>
+
+            <div class="card section">
+              <h2>Top Terms</h2>
+              {% if top_terms_plotly %}
+              <div>{{ top_terms_plotly | safe }}</div>
+              {% else %}
+              <img class="img" src="{{ top_unigrams }}" alt="Top unigrams">
+              <img class="img" src="{{ top_bigrams }}" alt="Top bigrams" style="margin-top:8px">
+              {% endif %}
+            </div>
+
+            <div class="card section">
+              <h2>Sentiment Over Time</h2>
+              <div>{{ sentiment_plotly | safe }}</div>
+            </div>
+          </div>
+
+          <div class="tab-panel" id="trends">
+            <div class="card">
+              <h2>Keyword Trends</h2>
+              <div>{{ keyword_trends_plotly | safe }}</div>
+            </div>
+
+            <div class="card section">
+              <h2>Keyword-Sentiment Correlation</h2>
+              <div>{{ cooccurrence_plotly | safe }}</div>
+              <img class="img" src="{{ heatmap }}" alt="Correlation heatmap" style="margin-top:8px">
+            </div>
+          </div>
+
+          <div class="tab-panel" id="multivariate">
+            <div class="card">
+              <h2>Predictive terms (predicting negative sentiment)</h2>
+              {% if predictive_terms_html %}
+              <div class="small">The table below lists features (tokens) that are most predictive of the <strong>negative</strong> label based on a simple logistic model.</div>
+              <div style="margin-top:8px">{{ predictive_terms_html | safe }}</div>
+              <p class="small" style="margin-top:6px"><a href="predictive_terms.csv">Download CSV</a></p>
+              {% else %}
+              <p class="small">No predictive terms computed for this dataset.</p>
+              {% endif %}
+            </div>
+
+            <div class="card section">
+              <h2>Sentiment spikes</h2>
+              {% if spikes_html %}
+              <div class="small">Detected spikes in rolling sentiment (z-score threshold). Review the rows to understand dates and severity.</div>
+              <div style="margin-top:8px">{{ spikes_html | safe }}</div>
+              <p class="small" style="margin-top:6px"><a href="sentiment_spikes.csv">Download CSV</a></p>
+              {% else %}
+              <p class="small">No sentiment spikes detected.</p>
+              {% endif %}
+            </div>
+
+            <div class="card section">
+              <h2>Topic — sentiment correlation</h2>
+              {% if topic_corr_html %}
+              <div class="small">Correlation between LDA topic weights and VADER sentiment (positive values indicate topics associated with more positive sentiment).</div>
+              <div style="margin-top:8px">{{ topic_corr_html | safe }}</div>
+              <p class="small" style="margin-top:6px"><a href="topic_sentiment_correlation.csv">Download CSV</a></p>
+              {% else %}
+              <p class="small">No topic-sentiment correlation computed.</p>
+              {% endif %}
+            </div>
+          </div>
+
+          <div class="tab-panel" id="clusters">
+            <div class="card">
+              <h2>Clusters — top terms & samples</h2>
+              <div class="small">Clusters are produced by LSA embeddings + KMeans; top terms summarize each cluster and sample snippets give context.</div>
+              <div style="margin-top:8px">{{ cluster_terms_html | safe }}</div>
+              <div style="margin-top:8px">{{ cluster_samples_html | safe }}</div>
+              <p class="small" style="margin-top:6px"><a href="cluster_top_terms.txt">Download cluster top terms</a> • <a href="cluster_samples.txt">Download cluster samples</a></p>
+            </div>
+          </div>
+        </div>
+
+        <aside>
+          <div class="card">
+            <h2>What</h2>
+            <p class="small">This report analyzes preprocessed customer text for <strong>{{ domain_name or 'all domains' }}</strong>. It computes common terms, sentiment over time (VADER), keyword trends, and correlations between keywords and sentiment.</p>
+          </div>
+
+          <div class="card section">
+            <h2>How</h2>
+            <p class="small">Preprocessing: text cleaning, tokenization, simple lemmatization. Sentiment: VADER polarity scores on cleaned text. Trends: counts of top keywords aggregated by time window.</p>
+          </div>
+
+          <div class="card section">
+            <h2>Why it matters</h2>
+            <p class="small">This helps prioritize operational issues (keywords tied to negative sentiment), track campaign/customer experience over time, and uncover topics requiring escalation.</p>
+          </div>
+
+          <div class="card section">
+            <h2>Quick recommendations</h2>
+            <ul class="small">
+              <li>Investigate spikes around {{ most_negative_time }} where negative sentiment increased.</li>
+              <li>Monitor top negative keywords for root-cause analysis.</li>
+              <li>Use the keyword-sentiment correlation to inform routing or tagging rules.</li>
+            </ul>
+          </div>
+
+          <div class="card section">
+            <h2>Label distribution</h2>
+            <table>
+              <thead><tr><th>Label</th><th>Count</th></tr></thead>
+              <tbody>
+              {% for k,v in label_counts.items() %}
+                <tr><td>{{ k }}</td><td>{{ v }}</td></tr>
+              {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </aside>
+      </div>
+
+    </div>
+    <style>
+      .tab-btn { background:#f1f6ff; border:1px solid #e6eefc; padding:8px 12px; border-radius:6px; cursor:pointer; }
+      .tab-btn.active { background:var(--accent); color:#fff; }
+      .tab-panel { display:none; }
+      .tab-panel.active { display:block; }
+    </style>
+    <script>
+      // Simple tab switching; runs after DOM is ready (script at end of body)
+      (function(){
+        const tabs = Array.from(document.querySelectorAll('.tab-btn'));
+        const panels = Array.from(document.querySelectorAll('.tab-panel'));
+        if(!tabs.length) return;
+        function setActive(tab){
+          tabs.forEach(t => t.classList.toggle('active', t===tab));
+          panels.forEach(p => p.classList.toggle('active', p.id === tab.dataset.tab));
+        }
+        tabs.forEach(t => t.addEventListener('click', function(e){ setActive(t); }));
+        // activate the first tab if none active
+        const initiallyActive = tabs.find(t => t.classList.contains('active')) || tabs[0];
+        setActive(initiallyActive);
+      })();
+    </script>
+  </body>
+</html>

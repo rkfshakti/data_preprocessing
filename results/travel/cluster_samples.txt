@@ -1,0 +1,42 @@
+Cluster 0 samples:
+hotel paris lost experience scenic
+---
+flight new york upgraded experience first-class
+---
+hotel tokyo booked experience non-refundable
+---
+Cluster 1 samples:
+flight rescheduled airport need assistance
+---
+refund enjoyed airport need assistance
+---
+refund upgraded umm airport need assistance
+---
+Cluster 2 samples:
+want know confirm luggage terrible luggage paris
+---
+want confirm itinerary disappointing itinerary paris ticket:827967
+---
+want confirm hotel first-class hotel paris
+---
+Cluster 3 samples:
+wonderful check-in grand hyatt need get check-in
+---
+non-refundable flight grand hyatt need get flight
+---
+wonderful voucher grand hyatt need get voucher
+---
+Cluster 4 samples:
+airline upgraded itinerary offered convenient travel itinerary
+---
+airline cancelled luggage offered overbooked travel luggage ticket:452203
+---
+airline delayed seat offered know terrible travel seat
+---
+Cluster 5 samples:
+hotel process convenient staff helpful
+---
+seat process non-refundable staff helpful
+---
+seat process terrible staff helpful
+---

@@ -1,0 +1,6 @@
+Cluster 0: transaction, successful, urgent, pending, value, denied, high, declined, disputed, erroneous
+Cluster 1: saving, inquire, like, account, overdraft, fraud, deposit, loan, payment, statement
+Cluster 2: correctly, processed, recent, fraud, overdraft, deposit, mortgage, payment, balance, rate
+Cluster 3: need, hold, urgent, erroneous, unauthorized, denied, flagged, successful, disputed, high
+Cluster 4: issue, writing, report, suspicious, unauthorized, pending, successful, erroneous, declined, high
+Cluster 5: insufficient, fund, disputed, approved, withdrew, charged, transferred, flagged, denied, resolved

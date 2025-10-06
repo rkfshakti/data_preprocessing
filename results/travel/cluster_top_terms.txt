@@ -1,0 +1,6 @@
+Cluster 0: experience, dubai, sydney, rome, london, tokyo, york, new, cancelled, delayed
+Cluster 1: assistance, airport, need, delayed, booked, cancelled, lost, rescheduled, enjoyed, confirmed
+Cluster 2: want, confirm, paris, luggage, seat, voucher, hotel, destination, check, itinerary
+Cluster 3: grand, hyatt, need, flight, hotel, refund, seat, reservation, booking, voucher
+Cluster 4: airline, travel, offered, luggage, booking, hotel, destination, check, refund, itinerary
+Cluster 5: staff, helpful, process, disappointing, terrible, refundable, non, overbooked, convenient, wonderful

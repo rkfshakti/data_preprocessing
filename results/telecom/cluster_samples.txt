@@ -1,0 +1,42 @@
+Cluster 0 samples:
+need speak outage overpriced charge
+---
+need speak billing helpful charge
+---
+need speak sim card excellent charge
+---
+Cluster 1 samples:
+unstable coverage area causing frequent dropped call
+---
+overpriced coverage area causing frequent dropped call
+---
+overpriced coverage area causing frequent dropped call
+---
+Cluster 2 samples:
+check service signal location
+---
+check umm service sim card location
+---
+check service invoice location
+---
+Cluster 3 samples:
+restarted incorrect amount recent customer service
+---
+escalated incorrect amount recent invoice
+---
+restarted incorrect amount recent invoice
+---
+Cluster 4 samples:
+unstable signal area causing frequent dropped call
+---
+poor signal area causing frequent dropped call
+---
+poor data plan area causing frequent dropped call umm
+---
+Cluster 5 samples:
+customer service unstable past hour
+---
+customer service unlimited past hour
+---
+roaming intermittent past hour
+---

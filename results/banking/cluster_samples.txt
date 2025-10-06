@@ -1,0 +1,42 @@
+Cluster 0 samples:
+urgent transaction 2241.65 fraud investigated
+---
+like urgent transaction 746.75 account investigated
+---
+unauthorized transaction 1974.07 interest rate flagged
+---
+Cluster 1 samples:
+would like inquire deposit saving account
+---
+would like inquire deposit saving account
+---
+would like inquire loan saving account
+---
+Cluster 2 samples:
+recent payment 1046.1 processed correctly
+---
+ref-9617 recent mortgage 3830.51 processed correctly
+---
+recent statement 4242.36 processed correctly
+---
+Cluster 3 samples:
+suspicious hold interest rate need disputed
+---
+ref-7751 pending hold fraud need denied
+---
+high-value hold payment need withdrew
+---
+Cluster 4 samples:
+writing report suspicious issue fraud
+---
+writing report suspicious issue account
+---
+writing report high-value issue deposit
+---
+Cluster 5 samples:
+statement deposited due insufficient fund
+---
+statement disputed due insufficient fund
+---
+loan flagged due insufficient fund
+---

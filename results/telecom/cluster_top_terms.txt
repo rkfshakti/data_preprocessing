@@ -1,0 +1,6 @@
+Cluster 0: speak, charge, need, excellent, unlimited, customer, invoice, intermittent, helpful, billing
+Cluster 1: coverage, frequent, causing, area, dropped, overpriced, unstable, frustrating, poor, ref
+Cluster 2: check, location, service, card, sim, plan, data, network, coverage, signal
+Cluster 3: warning, mobile, suddenly, recent, incorrect, resolved, upgraded, restarted, disconnected, escalated
+Cluster 4: dropped, frequent, causing, area, frustrating, outage, overpriced, poor, unstable, intermittent
+Cluster 5: hour, past, unlimited, helpful, intermittent, excellent, coverage, card, sim, invoice
